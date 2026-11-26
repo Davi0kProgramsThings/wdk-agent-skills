@@ -10,7 +10,7 @@ argument-hint: "[file or directory path to source files]"
 Review the source files at the provided path (or the current project's `src/` directory if none given). Apply all rules below.
 
 For each violation found, report:
-1. **Rule violated** (e.g., R1, R2, TD1, etc.)
+1. **Rule violated** (e.g., R1, R2, etc.)
 2. **File and line**
 3. **The offending code**
 4. **Suggested fix** with corrected code
@@ -178,7 +178,7 @@ async _buildInitData (config) { ... }
 
 ### R8. Always provide full JSDoc on overridden methods
 
-Copy the parent's JSDoc on the override. Keep the superclass description and only append implementation-specific details after it (e.g., "Establishes the connection to the server. Blockbook is a stateless REST API, so clients don't need to call this method.") — never replace the original description. The override's JSDoc is what the hand-maintained `.d.ts` declarations must mirror (**wdk-review-dts** TD1). Make documentation more blockchain-specific when possible — add `@example`, narrow return types, clarify behavior.
+Copy the parent's JSDoc on the override. Keep the superclass description and only append implementation-specific details after it (e.g., "Establishes the connection to the server. Blockbook is a stateless REST API, so clients don't need to call this method.") — never replace the original description. Make documentation more blockchain-specific when possible — add `@example`, narrow return types, clarify behavior.
 
 ```javascript
 /**
@@ -480,7 +480,7 @@ Boundaries of the named-typedef rule:
 ### R26. `undefined` vs `null` convention
 
 - **`undefined`** — uninitialized optional/cached properties, and absent optional values (pass `undefined`, never an empty `{}` placeholder).
-- **`null`** — lookup results when nothing is found (`T | null`, never `T | undefined`) — unless the method's contract declares an error for that case (e.g., `@throws {NoSuchElementError}`), in which case it must throw, never return `null` (**wdk-review-errors** E5) — and key-material properties cleared by `dispose()` (type them `Type | null` per the base-class disposal contract).
+- **`null`** — the return type of a lookup that can find nothing (`T | null`, never `T | undefined`), and key-material properties cleared by `dispose()` (type them `Type | null` per the base-class disposal contract).
 
 ```javascript
 /** @protected @type {SomeType | null} */
@@ -522,7 +522,7 @@ Descriptions must also be *behaviorally accurate*: state how multiple filter con
 
 If a default exists, include it per R4.
 
-For `@protected` methods (part of the public API — see code-of-conduct C003), this rule applies fully — protected ≈ public for documentation purposes. Private members are the only exception: they need no documentation beyond `@private` (R6), but if documented, this rule applies.
+For `@protected` methods (part of the public API), this rule applies fully — protected ≈ public for documentation purposes. Private members are the only exception: they need no documentation beyond `@private` (R6), but if documented, this rule applies.
 
 **Violation (no description):**
 ```javascript

@@ -29,8 +29,6 @@ Rules are grouped by prefix: **P** = project & workflow, **C** = code, **T** = t
 | [T004](#t004-define-and-assign-jest-functions-at-the-top-level-stub-them-in-test-cases) | Define and assign jest functions at the top level, stub them in test cases |
 | [T005](#t005-mock-all-depended-on-components-that-interact-with-external-services) | Mock all depended-on components that interact with external services |
 
-> **Related skills:** `wdk-review-jsdocs` (JSDoc & type-annotation conventions) and `wdk-review-dts` (`.d.ts` maintenance) enforce the conventions behind C003/C004 in depth; `wdk-review-errors` (error contracts) enforces C002 (Liskov Substitution) for thrown errors in depth; `wdk-review-tests` enforces the T-rules in depth. Reach for them when you want a focused review of an existing file.
-
 ---
 
 ## Project guidelines

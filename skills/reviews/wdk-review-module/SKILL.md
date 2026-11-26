@@ -24,7 +24,7 @@ A claim in a README is not evidence that the code does it. Do not use real funds
 
 - **M1. Run on Bare.** `exports["."].bare` points to an entry that exists and loads `bare-node-runtime`.
 - **M2. Resolve one copy of `@tetherto/wdk-wallet`.** `package.json` declares a version range, not an exact version.
-- **M3. Keep failures distinct.** Invalid input, missing configuration, and provider failures throw. They never become an empty or successful result, whether by `catch`, early return, or empty stub (`wdk-review-errors` E5). An overridden method throws only the errors its super-class `@throws` declares, or sub-classes of them (E1): WDK errors are reused where one fits, and a custom error extends the declared error it specializes — only methods with no super-class definition may throw custom errors that extend `WdkError` directly. An unsupported operation throws `UnsupportedOperationError` only where the super-class declares it; otherwise it is implemented (E7). Each error a method throws as part of its contract has `@throws`; `NotImplementedError` and `AssertionError` never do (E6), and external errors that cannot occur by construction are neither handled nor documented (E3).
+- **M3. Keep failures distinct.** Invalid input, unsupported operations, missing configuration, and provider failures throw. They never become an empty or successful result, whether by `catch`, early return, or empty stub. WDK errors are reused where one fits, custom errors extend `WdkError`, and each thrown error has `@throws`.
 - **M4. Never lose a transaction.** After a submission, every result and error path keeps the transaction identifier and partial-execution details. A failed submission is distinct from an unknown broadcast outcome.
 - **M5. Add, don't redefine.** The module extends the base class for its type in the latest `@tetherto/wdk-wallet` release and implements every required method. Each override keeps the meaning and return shape of its method there.
 - **M6. Export what callers need.** `wdk-review-dts` TD3 and TD4 hold. Thrown errors meet TD5, or their import path is documented.
@@ -33,7 +33,7 @@ A claim in a README is not evidence that the code does it. Do not use real funds
 ### Protocol modules
 
 - **M8. Sign with the host's account.** Signing and submission go only through the account given to the constructor. There is no seed or private key input, and no second signer. Chain module types are used where they specialize the base ones.
-- **M9. Report status honestly.** An unrecognized status in a valid response maps to `pending` for swidge and SDA, or `in_progress` for fiat. Invalid identifiers, missing records, and failed requests throw the errors the interface declares for them (`wdk-review-errors` E1, E5).
+- **M9. Report status honestly.** An unrecognized status in a valid response maps to `pending` for swidge and SDA, or `in_progress` for fiat. Invalid identifiers, missing records, and failed requests throw.
 - **M10. Honor fee caps.** Exceeding a fee cap the interface defines, such as `swapMaxFee`, throws `MaximumFeeExceededError`.
 
 ### Wallet modules
@@ -58,11 +58,11 @@ A claim in a README is not evidence that the code does it. Do not use real funds
 
 ### Behavior
 
-- **M17. Tests.** `npm test` passes, `grep -rnE "(test|it)\.todo" tests` finds nothing, and every `@throws` in `src/` whose condition the implementation can trigger has a test. An inherited `@throws` the implementation can never throw needs no test (`wdk-review-errors` E4).
-- **M18. Main flow.** A test runs the main flow through `@tetherto/wdk` and a real wallet package, with no mocks or sender stubs, on a fork at a known block — never against a live network (`wdk-review-tests`, Integration Test Conventions). Give the block height for the review request.
+- **M17. Tests.** `npm test` passes, `grep -rnE "(test|it)\.todo" tests` finds nothing, and every `@throws` in `src/` has a test.
+- **M18. Main flow.** A test runs the main flow through `@tetherto/wdk` and a real wallet package, with no mocks or sender stubs, on a fork at a known block, or live if the provider can't run on a fork. Give the block height, or the network and transaction hash, for the review request.
 - **M19. Bare runtime.** The same flow runs from the packed Bare entry with `bare <file>`, not through `npm test`, or the README documents an approved waiver. A test that only imports the entry does not count.
 - **M20. Disposal.** If the module holds extra state, tests dispose through both the account and the manager and assert the state is gone.
-- **M21. Companion skills.** Run `wdk-review-jsdocs`, `wdk-review-dts`, `wdk-review-errors`, and `wdk-review-tests`. Report their violation counts.
+- **M21. Companion skills.** Run `wdk-review-jsdocs`, `wdk-review-dts`, and `wdk-review-tests`. Report their violation counts.
 
 ### Documentation
 

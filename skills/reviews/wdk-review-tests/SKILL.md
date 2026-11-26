@@ -214,7 +214,7 @@ Every new public method added in a PR must have corresponding unit tests. Flag a
 
 When a method accepts optional parameters (`limit`, `offset`, `direction`, `confirmationTarget`, etc.), there must be test cases covering those variants. Edge cases like null returns and boundary values must also be covered.
 
-Coverage stops at the documented contract. Do not test inputs the method's contract disallows or that the parameter types already exclude (e.g., `null` where the parameter is typed as a string) — the no-defensive-programming rule applies to tests too. Flag such tests for removal. Inputs whose rejection IS part of the documented contract (a `@throws` condition, e.g. an empty or blank string where the doc says it throws) still require tests per R5/R11 — only inputs excluded by the parameter types or disallowed by the contract are off-limits. An inherited `@throws` whose condition the implementation can never trigger (allowed by **wdk-review-errors** E4) needs no test.
+Coverage stops at the documented contract. Do not test inputs the method's contract disallows or that the parameter types already exclude (e.g., `null` where the parameter is typed as a string) — the no-defensive-programming rule applies to tests too. Flag such tests for removal. Inputs whose rejection IS part of the documented contract (a `@throws` condition, e.g. an empty or blank string where the doc says it throws) still require tests per R5/R11 — only inputs excluded by the parameter types or disallowed by the contract are off-limits. An inherited `@throws` whose condition the implementation can never trigger needs no test.
 
 **Violation:**
 ```javascript

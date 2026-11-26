@@ -15,7 +15,7 @@ For each violation found, report:
 3. **The offending code**
 4. **Suggested fix** with corrected code
 
-Group findings by file. After all files are reviewed, provide a summary with total violation counts per rule.
+Group findings by file. Report each site once, under its most severe rule, and list any other rules it breaks. After all files are reviewed, provide a summary with total violation counts per rule.
 
 ---
 
@@ -27,7 +27,7 @@ The rules are repository-agnostic. No WDK module is a "golden reference" — app
 
 Breaking an error contract violates the Liskov Substitution Principle (LSP): a consumer written against the interface catches exactly the errors the interface declares, so any other error an implementation throws escapes that handling. Treat E1 and E5 violations as **critical** bugs.
 
-To review a method, always open its definition in the super-class first (from the installed `node_modules/@tetherto/wdk-wallet/src/` — `errors.js` for wallet errors, `protocols/errors.js` for protocol errors), and compare the implementation against it — never against another implementation.
+To review a method, always open its definition in the super-class first and compare the implementation against it — never against another implementation. The definitions are in the installed `node_modules/@tetherto/wdk-wallet/src/`: `wallet-account-read-only.js`, `wallet-account.js`, and `wallet-manager.js` for wallets, and `protocols/<type>-protocol.js` (for example `protocols/swidge-protocol.js`) for protocols. The error classes are in `errors.js` and `protocols/errors.js`.
 
 ---
 
@@ -271,5 +271,3 @@ Generally we don't need assertion errors: question every new one.
 4. **Own `@throws`** — the method's `@throws` is a subset of the super-class contract (E1, E4) and lists every contract error the body can actually throw (E4).
 5. **Behavior preservation** — no declared error condition is replaced by a sentinel return value or silently ignored (E5).
 6. **Special errors** — `NotImplementedError` and `AssertionError` never appear in `@throws` (E6); `NotImplementedError` is thrown only by interface and abstract methods (E7); every `AssertionError` guards a genuine internal invariant (E8).
-
-> JSDoc formatting of `@throws` tags (one tag per distinct condition) is rule R17 in the companion skill **wdk-review-jsdocs**; exporting custom error classes from `index.js` and `types/` is rule TD5 in **wdk-review-dts**.
